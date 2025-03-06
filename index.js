@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express();
-const PORT = 8001;
+
 const urlRoute = require('./routes/url');
 const {connectToMongoDb} = require('./connect');
 const URL = require('./models/url')
@@ -10,9 +10,12 @@ const staticRoute = require('./routes/staticRoute');
 const userRoute = require('./routes/user');
 const cookieParser = require('cookie-parser');
 const {restrictToLoggedInUsersOnly} = require('./middleware/auth')
+import dotenv from dotenv
+
+dotenv.config();
 
 
-connectToMongoDb('mongodb://127.0.0.1:27017/short-url')
+connectToMongoDb(process.env.MONGODB_URI)
 .then(()=>{
     console.log('MongoDB Connected');
     
@@ -59,7 +62,7 @@ app.get('/test', async (req,res)=>{
     })
 })
 
-app.listen(PORT,()=>{
+app.listen(process.env.PORT,()=>{
     console.log(`Server started at port : ${PORT}`);
     
 })
